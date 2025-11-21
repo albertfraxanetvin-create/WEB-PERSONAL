@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ca">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Relleu Jove - Dona Sang Catalunya</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Flowbite -->
+  <link rel="stylesheet" href="https://unpkg.com/flowbite@1.7.0/dist/flowbite.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+
+  <!-- Leaflet CSS/JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .hover-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Pin personalitzat */
+    .pin-custom {
+      width: 40px;
+      height: 55px;
+      background-image: url('pin-apple-style.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      display: block;
+    }
+
+    /* Map */
+    #map {
+      width: 100%;
+      height: 450px;
+      border-radius: 16px;
+    }
+
+    /* Pin personalitzat */
+    .pin-custom {
+      width: 40px;
+      height: 55px;
+      background-image: url('pin-apple-style.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      display: block;
+    }
+
+    /* Map */
+    #map {
+      width: 100%;
+      height: 450px;
+      border-radius: 16px;
+    }
+
+    /* --- FIX: Evitar que el mapa tapi el modal --- */
+    #signupModal {
+      z-index: 9999 !important;
+    }
+
+    .leaflet-container,
+    .leaflet-pane,
+    .leaflet-top,
+    .leaflet-bottom {
+      z-index: 0 !important;
+    }
+  </style>
+
+  </style>
+</head>
+
+<body class="antialiased text-slate-800 bg-white">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white/90 backdrop-blur sticky top-0 z-50 border-b border-red-100">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="#hero" class="flex items-center gap-3">
+          <span
+            class="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-red-700 text-white flex items-center justify-center font-bold">✚</span>
+          <div class="hidden sm:block">
+            <div class="text-sm font-semibold">Relleu Jove</div>
+            <div class="text-xs text-slate-500">Dona sang · Catalunya</div>
+          </div>
+        </a>
+
+        <div class="hidden md:flex items-center gap-6 text-sm">
+          <a href="#problem" class="hover:text-red-600">La problemàtica</a>
+          <a href="#proc" class="hover:text-red-600">Com ho fas</a>
+          <a href="#benef" class="hover:text-red-600">Mites i Beneficis</a>
+          <a href="#testi" class="hover:text-red-600">Testimonis</a>
+          <a href="#localitzacions" class="hover:text-red-600">On donar</a>
+        </div>
+
+        <button data-modal-target="signupModal" data-modal-toggle="signupModal"
+          class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-sm shadow">Fes-te donant</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="hero" class="bg-gradient-to-b from-white via-red-50/50 to-white py-20 lg:py-28">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col lg:flex-row items-center gap-12">
+      <div class="w-full lg:w-1/2">
+        <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">Sigues el relleu. <span class="text-red-600">Dona
+            sang</span> i salva vides.</h1>
+        <p class="mt-6 text-lg text-slate-600">Catalunya necessita el teu gest. El futur de les reserves de sang el
+          podem assegurar entre tots.
+        </p>
+        <div class="mt-8 flex gap-4">
+          <button data-modal-target="signupModal" data-modal-toggle="signupModal"
+            class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-full shadow text-sm font-semibold">Apunta’t
+            ara</button>
+          <a href="#problem" class="underline text-sm text-slate-700">Per què és urgent?</a>
+        </div>
+      </div>
+      <div class="w-full lg:w-1/2">
+        <div class="rounded-3xl shadow-xl bg-white p-4 hover-card">
+          <img src="hero.png" class="rounded-2xl w-full h-80 object-cover" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROBLEMÀTICA -->
+  <section id="problem" class="max-w-6xl mx-auto px-4 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div>
+        <h2 class="text-3xl font-bold">La problemàtica</h2>
+        <p class="mt-4 text-slate-600">La mitjana d’edat dels donants puja i cal un relleu urgent.</p>
+        <ul class="mt-6 space-y-4 text-sm">
+          <li class="flex gap-3"><span class="text-red-600">●</span> Més cirurgies, menys donants.</li>
+          <li class="flex gap-3"><span class="text-red-600">●</span> Relleu insuficient a la franja 18–35.</li>
+        </ul>
+      </div>
+      <div class="space-y-4">
+        <div class="bg-white p-4 rounded-2xl shadow hover-card flex justify-between items-center">
+          <div>
+            <p class="text-3xl font-extrabold text-red-600">+60%</p>
+            <p class="text-xs text-slate-500">Augment demanda hospitalària</p>
+          </div>
+          <div class="text-3xl">🩺</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl shadow hover-card flex justify-between items-center">
+          <div>
+            <p class="text-3xl font-extrabold text-red-600">28%</p>
+            <p class="text-xs text-slate-500">Donants joves</p>
+          </div>
+          <div class="text-3xl">👥</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCÉS -->
+  <section id="proc" class="bg-red-50/40 py-16">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold">Com és el procés</h2>
+      <p class="text-slate-600 mt-2">Ràpid. Segur. I molt més fàcil del que penses.</p>
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow hover-card">
+          <div class="text-4xl">📝</div>
+          <h3 class="font-semibold mt-3">Registre</h3>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow hover-card">
+          <div class="text-4xl">🩸</div>
+          <h3 class="font-semibold mt-3">Extracció</h3>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow hover-card">
+          <div class="text-4xl">☕</div>
+          <h3 class="font-semibold mt-3">Recuperació</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MITES I BENEFICIS -->
+  <section id="benef" class="max-w-6xl mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold text-center">Mites i Beneficis</h2>
+    <p class="text-center text-slate-600 mt-2">Resolem dubtes i destaquem allò positiu.</p>
+    <div class="mt-10 max-w-3xl mx-auto" data-accordion="collapse">
+      <button class="flex justify-between w-full p-4 border" data-accordion-target="#m1"><span>Mite: Donar sang fa
+          mal</span><span>▼</span></button>
+      <div id="m1" class="hidden p-4 border border-t-0">Només una punxadeta. Res més.</div>
+      <button class="flex justify-between w-full p-4 border" data-accordion-target="#m2"><span>Mite: No puc donar si he
+          tingut COVID</span><span>▼</span></button>
+      <div id="m2" class="hidden p-4 border border-t-0">Sí! Pots donar sang si ja t’has recuperat del COVID.</div>
+      <button class="flex justify-between w-full p-4 border" data-accordion-target="#m3"><span>Benefici: Pots salvar 3
+          vides</span><span>▼</span></button>
+      <div id="m3" class="hidden p-4 border border-t-0">Cada donació ajuda 3 pacients.</div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIS -->
+  <section id="testi" class="bg-red-50/40 py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center">Testimonis</h2>
+      <p class="text-center text-slate-600 mt-2">Joves que ja donen.</p>
+
+      <div class="mt-10">
+        <div id="default-carousel" class="relative w-full" data-carousel="slide" data-carousel-interval="3000">
+          <div class="relative h-80 overflow-hidden rounded-lg md:h-96">
+
+            <!-- ITEM 1 -->
+            <div class="duration-700 ease-in-out" data-carousel-item="active" data-center="clinic">
+              <div class="flex flex-col md:flex-row h-full items-center justify-center gap-6 p-6">
+                <img src="testimoni1.jpg" class="w-40 h-40 object-cover rounded-full shadow-md border-4 border-white" />
+                <div class="bg-white p-6 rounded-2xl shadow-lg max-w-lg">
+                  <p class="italic">“Vaig decidir donar sang després que una amiga necessités una transfusió urgent.”
+                  </p>
+                  <p class="font-semibold mt-4">Anna P. · 19 anys</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ITEM 2 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item data-center="girona">
+              <div class="flex flex-col md:flex-row h-full items-center justify-center gap-6 p-6">
+                <img src="testimoni2.jpg" class="w-40 h-40 object-cover rounded-full shadow-md border-4 border-white" />
+                <div class="bg-white p-6 rounded-2xl shadow-lg max-w-lg">
+                  <p class="italic">“Donar sang és rapidíssim i et tracten molt bé.”</p>
+                  <p class="font-semibold mt-4">Marc L. · 24 anys</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ITEM 3 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item data-center="lleida">
+              <div class="flex flex-col md:flex-row h-full items-center justify-center gap-6 p-6">
+                <img src="testimoni3.jpg" class="w-40 h-40 object-cover rounded-full shadow-md border-4 border-white" />
+                <div class="bg-white p-6 rounded-2xl shadow-lg max-w-lg">
+                  <p class="italic">“Surts amb la sensació d’haver fet alguna cosa realment important.”</p>
+                  <p class="font-semibold mt-4">David R. · 20 anys</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Controls -->
+          <button type="button" class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4"
+            data-carousel-prev>
+            <span class="w-10 h-10 bg-white/80 rounded-full flex items-center justify-center text-2xl">‹</span>
+          </button>
+
+          <button type="button" class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4"
+            data-carousel-next>
+            <span class="w-10 h-10 bg-white/80 rounded-full flex items-center justify-center text-2xl">›</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPA -->
+  <section id="localitzacions" class="bg-white py-16">
+    <div class="max-w-6xl mx-auto px-4">
+
+      <h2 class="text-3xl font-bold text-center">On pots donar sang</h2>
+      <p class="text-center text-slate-600 mt-2">Descobreix on pots donar sang a prop teu.</p>
+
+      <div id="map" class="mt-10 rounded-2xl shadow-xl"></div>
+
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section id="cta-final" class="max-w-6xl mx-auto px-4 py-16">
+    <div
+      class="bg-gradient-to-r from-red-600 to-rose-500 text-white p-10 rounded-3xl shadow-lg flex flex-col lg:flex-row justify-between items-center gap-6">
+      <div>
+        <h3 class="text-2xl font-bold">Estàs a un clic de salvar vides.</h3>
+        <p class="mt-2">Fes-te donant avui. El teu gest importa.</p>
+      </div>
+
+      <div class="flex gap-3">
+        <button data-modal-target="signupModal" data-modal-toggle="signupModal"
+          class="px-6 py-3 bg-white text-red-600 font-semibold rounded-full shadow hover:scale-105 transition">Apunta’m</button>
+        <a href="#proc" class="px-4 py-3 rounded-full border border-white/30">Com funciona</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t mt-10">
+    <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-slate-500">© 2025 Relleu Jove — Campanya de donació de sang</p>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div id="signupModal" tabindex="-1" aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 w-full h-full bg-black/50">
+    <div class="relative p-4 w-full max-w-lg mx-auto h-full md:h-auto">
+      <div class="relative bg-white rounded-lg shadow">
+        <button type="button"
+          class="absolute top-3 right-3 text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5"
+          data-modal-hide="signupModal">✕</button>
+        <div class="px-6 py-6">
+          <h3 class="text-xl font-medium text-gray-900 mb-4">Inscripció ràpida</h3>
+          <form class="space-y-6">
+            <input type="text" placeholder="Nom complet" class="w-full p-2.5 border rounded-lg" required />
+            <input type="email" placeholder="Correu electrònic" class="w-full p-2.5 border rounded-lg" required />
+            <input type="number" placeholder="Edat (18-70)" class="w-full p-2.5 border rounded-lg" required />
+            <input type="text" placeholder="Municipi" class="w-full p-2.5 border rounded-lg" required />
+            <label class="flex items-center gap-2 text-sm"><input type="checkbox" required /> Accepto rebre informació
+              sobre punts i horaris.</label>
+            <button type="submit"
+              class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 w-full">Enviar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dades centres (LAT, LNG per Leaflet)
+    const centres = {
+      clinic: { coords: [41.38506, 2.15400], name: "Hospital Clínic — Barcelona" },
+      girona: { coords: [41.97964, 2.81979], name: "Centre de Donació — Girona" },
+      lleida: { coords: [41.61860, 0.61374], name: "Hospital Arnau de Vilanova — Lleida" }
+    };
+
+    // Inicialitza Leaflet (per el mapa, no ho fa Flowbite, no pujara nota pero espero que no importi, voliem un mapa)
+    const map = L.map('map', { zoomControl: true }).setView([41.7, 1.7], 7);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Icona
+    const pinIcon = L.icon({
+      iconUrl: 'pin-apple-style.png',
+      iconSize: [40, 55],
+      iconAnchor: [20, 55],
+      popupAnchor: [0, -50]
+    });
+
+    // Markers
+    const markerRefs = {};
+    Object.keys(centres).forEach(k => {
+      markerRefs[k] = L.marker(centres[k].coords, { icon: pinIcon })
+        .addTo(map)
+        .bindPopup(`<strong>${centres[k].name}</strong>`);
+    });
+
+    // Forçar reflow
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 300);
+    });
+
+    // Moure mapa a slide actiu
+    function moveToActiveSlide() {
+      const items = Array.from(document.querySelectorAll("[data-carousel-item]"));
+      const visible = items.find(i => !i.classList.contains("hidden"));
+
+      if (!visible) return;
+
+      const key = visible.dataset.center || "clinic";
+      const pos = centres[key].coords;
+
+      map.flyTo(pos, 13, { duration: 0.8 });
+      markerRefs[key].openPopup();
+
+      setTimeout(() => map.invalidateSize(), 300);
+    }
+
+    
+    document.querySelectorAll("[data-carousel-next], [data-carousel-prev]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        setTimeout(moveToActiveSlide, 350); 
+      });
+    });
+    setTimeout(moveToActiveSlide, 500);
+  </script>
+
+
+</body>
+
+</html>
